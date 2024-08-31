@@ -14,22 +14,47 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
+            flex-direction: column;
         }
 
-        #birthdayMessage {
+        #birthdayForm {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #birthdayForm input {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #birthdayForm button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #birthdayMessage, #dateDisplay {
             font-size: 50px;
             font-weight: bold;
             text-align: center;
             opacity: 0;
             font-family: 'Brush Script MT', cursive;
+            margin-top: 20px;
         }
 
         #dateDisplay {
             font-size: 30px;
-            text-align: center;
             margin-top: 10px;
             font-family: 'Comic Sans MS', cursive, sans-serif;
-            opacity: 0;
         }
 
         #mysteryBox {
@@ -54,6 +79,15 @@
     </style>
 </head>
 <body>
+
+    <!-- Form for entering name and date -->
+    <div id="birthdayForm">
+        <input type="text" id="userName" placeholder="Enter your name" required>
+        <input type="date" id="birthdayDate" required>
+        <button onclick="showBirthdayMessage()">Submit</button>
+    </div>
+
+    <!-- Birthday message -->
     <div id="birthdayMessage"></div>
     <div id="dateDisplay"></div>
 
@@ -61,16 +95,22 @@
     <div id="mysteryBox">🎁</div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const name = "Moaz";  // Replace with the name entered
-            const month = "August";  // Replace with the month extracted from the date
-            const day = "23";  // Replace with the day extracted from the date
+        function showBirthdayMessage() {
+            const name = document.getElementById('userName').value;
+            const date = new Date(document.getElementById('birthdayDate').value);
+            const monthNames = ["January", "February", "March", "April", "May", "June", 
+                                "July", "August", "September", "October", "November", "December"];
+            const month = monthNames[date.getMonth()];
+            const day = date.getDate();
 
             const messageContainer = document.getElementById('birthdayMessage');
             const dateContainer = document.getElementById('dateDisplay');
             const message = `Happy Birthday, ${name}!`;
             let i = 0;
             const speed = 100;
+
+            // Hide form after submission
+            document.getElementById('birthdayForm').style.display = 'none';
 
             function typeEffect() {
                 if (i < message.length) {
@@ -127,7 +167,7 @@
 
             // Start the typing effect
             typeEffect();
-        });
+        }
     </script>
 </body>
 </html>
