@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden; /* Hide scrollbars during confetti */
+            overflow: hidden;
             animation: backgroundChange 5s infinite linear;
         }
 
@@ -68,17 +68,16 @@
             font-weight: bold;
             text-align: center;
             opacity: 0;
-            transition: opacity 1s;
-            font-family: 'Brush Script MT', cursive; /* Change the font */
-            color: #ff69b4; /* Initial color for text */
+            font-family: 'Brush Script MT', cursive;
+            color: #ff69b4;
         }
 
         #details {
             font-size: 24px;
             text-align: center;
             margin-top: 10px;
-            font-family: 'Comic Sans MS', cursive, sans-serif; /* Different font for details */
-            color: #0000ff; /* Initial color for details */
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            color: #0000ff;
             opacity: 0;
         }
 
@@ -86,33 +85,16 @@
             display: none;
         }
 
-        @keyframes colorChange {
-            0% { color: red; }
-            25% { color: orange; }
-            50% { color: green; }
-            75% { color: blue; }
-            100% { color: purple; }
-        }
-
-        @keyframes reveal {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .animated-letter, .animated-detail {
-            display: inline-block;
-            animation: colorChange 2s infinite, reveal 2s ease forwards;
-            opacity: 0;
-        }
-
-        /* Full-screen confetti effect */
-        #confettiCanvas {
+        /* Party Bomb Emoji Styling */
+        .party-bomb {
+            font-size: 50px;
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Don't interfere with other elements */
+            animation: float 2s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
     </style>
 </head>
@@ -132,8 +114,8 @@
 
     <div id="birthdayMessage" class="hidden"></div>
     <div id="details" class="hidden"></div>
-    <canvas id="confettiCanvas"></canvas>
 
+    <!-- JavaScript code -->
     <script>
         document.getElementById('birthdayForm').addEventListener('submit', function(e) {
             e.preventDefault();  // Prevent the form from submitting
@@ -147,84 +129,44 @@
             // Hide the form
             document.getElementById('form-container').classList.add('hidden');
 
-            // Create the message with animation
-            const message = `Happy Birthday, ${name}!`;
+            // JavaScript for smoother animation
             const messageContainer = document.getElementById('birthdayMessage');
-            
-            message.split('').forEach((char, index) => {
-                const span = document.createElement('span');
-                span.textContent = char;
-                span.classList.add('animated-letter');
-                span.style.animationDelay = `${index * 0.2}s`;  // Slower reveal
-                messageContainer.appendChild(span);
-            });
-
-            // Show the message
-            messageContainer.classList.remove('hidden');
-            messageContainer.style.opacity = 1;
-
-            // Show the details with animation
-            const details = `Name: ${name}<br>Date of Birth: ${month} ${day}`;
             const detailsContainer = document.getElementById('details');
-            details.split('').forEach((char, index) => {
-                const span = document.createElement('span');
-                span.innerHTML = char === '<' ? '<br>' : char; // Preserve line break
-                span.classList.add('animated-detail');
-                span.style.animationDelay = `${index * 0.2}s`;
-                detailsContainer.appendChild(span);
-            });
+            const message = `Happy Birthday, ${name}!`;
+            let i = 0;
+            const speed = 100;
 
-            detailsContainer.classList.remove('hidden');
-            detailsContainer.style.opacity = 1;
+            function typeEffect() {
+                if (i < message.length) {
+                    messageContainer.textContent += message.charAt(i);
+                    messageContainer.style.opacity = 1;
+                    i++;
+                    setTimeout(typeEffect, speed);
+                } else {
+                    detailsContainer.textContent = `${month} ${day}`;
+                    detailsContainer.style.opacity = 1;
+                }
+            }
 
-            // Trigger the confetti
-            startConfetti();
+            typeEffect();
+
+            // Party bomb effect
+            createPartyBombs();
         });
 
-        function startConfetti() {
-            const canvas = document.getElementById('confettiCanvas');
-            const ctx = canvas.getContext('2d');
-            const confetti = [];
-            const colors = ['#ff0a54', '#ff477e', '#ff85a1', '#fbb1bd', '#f9bec7'];
-            
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            function ConfettiParticle() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height - canvas.height;
-                this.radius = Math.random() * 6 + 4;
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.density = Math.random() * canvas.height / 10;
-                this.velocityX = Math.random() * 3 - 1.5;  // Faster horizontal speed
-                this.velocityY = Math.random() * 5 + 3;  // Faster vertical speed
+        function createPartyBombs() {
+            const bombCount = 10;
+            const body = document.body;
+            for (let i = 0; i < bombCount; i++) {
+                const bomb = document.createElement('div');
+                bomb.classList.add('party-bomb');
+                bomb.textContent = '🥳🎉';
+                bomb.style.left = `${Math.random() * 100}%`;
+                bomb.style.top = `${Math.random() * 100}%`;
+                bomb.style.animationDelay = `${Math.random() * 5}s`;
+                body.appendChild(bomb);
             }
-
-            function updateConfetti() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                confetti.forEach((particle, index) => {
-                    particle.y += particle.velocityY;
-                    particle.x += particle.velocityX;
-                    if (particle.y > canvas.height) {
-                        confetti[index] = new ConfettiParticle(); // Reset particle
-                    }
-                    ctx.beginPath();
-                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2, false);
-                    ctx.fillStyle = particle.color;
-                    ctx.fill();
-                });
-                requestAnimationFrame(updateConfetti);
-            }
-
-            function initConfetti() {
-                for (let i = 0; i < 150; i++) {
-                    confetti.push(new ConfettiParticle());
-                }
-                updateConfetti();
-            }
-
-            initConfetti();
         }
     </script>
 </body>
-</html>            
+</html>
