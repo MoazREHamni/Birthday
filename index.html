@@ -14,44 +14,15 @@
             height: 100vh;
             margin: 0;
             overflow: hidden; /* Hide scrollbars during confetti */
+            animation: backgroundColorChange 10s infinite;
         }
 
-        .form-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #45a049;
+        @keyframes backgroundColorChange {
+            0% { background-color: #ffebee; }
+            25% { background-color: #fce4ec; }
+            50% { background-color: #f3e5f5; }
+            75% { background-color: #ede7f6; }
+            100% { background-color: #e3f2fd; }
         }
 
         #birthdayMessage {
@@ -74,10 +45,11 @@
 
         @keyframes colorChange {
             0% { color: red; }
-            25% { color: orange; }
-            50% { color: green; }
-            75% { color: blue; }
-            100% { color: purple; }
+            20% { color: orange; }
+            40% { color: yellow; }
+            60% { color: green; }
+            80% { color: blue; }
+            100% { color: violet; }
         }
 
         @keyframes reveal {
@@ -87,7 +59,7 @@
 
         .animated-letter {
             display: inline-block;
-            animation: colorChange 1s infinite, reveal 1s ease forwards;
+            animation: colorChange 2s infinite, reveal 1s ease forwards;
             opacity: 0;
         }
 
@@ -103,45 +75,33 @@
     </style>
 </head>
 <body>
-    <div class="form-container" id="form-container">
-        <h1>Birthday Form</h1>
-        <form id="birthdayForm">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            
-            <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob" name="dob" required>
-            
-            <button type="submit">Enter</button>
-        </form>
-    </div>
-
     <div id="birthdayMessage" class="hidden"></div>
     <div id="details" class="hidden"></div>
     <canvas id="confettiCanvas"></canvas>
 
     <script>
-        document.getElementById('birthdayForm').addEventListener('submit', function(e) {
-            e.preventDefault();  // Prevent the form from submitting
-
-            const name = document.getElementById('name').value;
-            const dob = new Date(document.getElementById('dob').value);
+        window.onload = function() {
+            // Example user inputs (replace with actual input retrieval logic)
+            const name = "John";
+            const dob = new Date("2024-08-31"); // Example date
             const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             const month = monthNames[dob.getMonth()];
             const day = dob.getDate();
 
-            // Hide the form
-            document.getElementById('form-container').classList.add('hidden');
-
             // Create the message with animation
-            const message = `Happy Birthday, ${name}!`;
+            const message = `Hello my friend, Happy Birthday ${name}!`;
+            const details = `Wishing you all the best in ${month} ${day}!`;
+
+            const wishes = `May this special day bring you endless joy and tons of precious memories!`;
+
+            const fullMessage = `${message}\n${details}\n${wishes}`;
             const messageContainer = document.getElementById('birthdayMessage');
             
-            message.split('').forEach((char, index) => {
+            fullMessage.split('').forEach((char, index) => {
                 const span = document.createElement('span');
                 span.textContent = char;
                 span.classList.add('animated-letter');
-                span.style.animationDelay = `${index * 0.1}s`;  // Faster reveal
+                span.style.animationDelay = `${index * 0.1}s`;  // Reveal with delay
                 messageContainer.appendChild(span);
             });
 
@@ -149,15 +109,9 @@
             messageContainer.classList.remove('hidden');
             messageContainer.style.opacity = 1;
 
-            // Show the details
-            const details = `Name: ${name}<br>Date of Birth: ${month} ${day}`;
-            const detailsContainer = document.getElementById('details');
-            detailsContainer.innerHTML = details;
-            detailsContainer.classList.remove('hidden');
-
             // Trigger the confetti
             startConfetti();
-        });
+        };
 
         function startConfetti() {
             const canvas = document.getElementById('confettiCanvas');
@@ -205,4 +159,4 @@
         }
     </script>
 </body>
-</html>    
+</html>
