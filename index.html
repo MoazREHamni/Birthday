@@ -14,6 +14,15 @@
             height: 100vh;
             margin: 0;
             overflow: hidden; /* Hide scrollbars during confetti */
+            animation: backgroundChange 10s infinite linear;
+        }
+
+        @keyframes backgroundChange {
+            0% { background-color: #ffadad; }
+            25% { background-color: #ffd6a5; }
+            50% { background-color: #fdffb6; }
+            75% { background-color: #caffbf; }
+            100% { background-color: #9bf6ff; }
         }
 
         .form-container {
@@ -60,12 +69,17 @@
             text-align: center;
             opacity: 0;
             transition: opacity 1s;
+            font-family: 'Brush Script MT', cursive; /* Change the font */
+            color: #ff69b4; /* Initial color for text */
         }
 
         #details {
             font-size: 24px;
             text-align: center;
             margin-top: 10px;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* Different font for details */
+            color: #0000ff; /* Initial color for details */
+            opacity: 0;
         }
 
         .hidden {
@@ -85,7 +99,7 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        .animated-letter {
+        .animated-letter, .animated-detail {
             display: inline-block;
             animation: colorChange 1s infinite, reveal 1s ease forwards;
             opacity: 0;
@@ -149,11 +163,19 @@
             messageContainer.classList.remove('hidden');
             messageContainer.style.opacity = 1;
 
-            // Show the details
+            // Show the details with animation
             const details = `Name: ${name}<br>Date of Birth: ${month} ${day}`;
             const detailsContainer = document.getElementById('details');
-            detailsContainer.innerHTML = details;
+            details.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.innerHTML = char === '<' ? '<br>' : char; // Preserve line break
+                span.classList.add('animated-detail');
+                span.style.animationDelay = `${index * 0.1}s`;
+                detailsContainer.appendChild(span);
+            });
+
             detailsContainer.classList.remove('hidden');
+            detailsContainer.style.opacity = 1;
 
             // Trigger the confetti
             startConfetti();
@@ -174,8 +196,8 @@
                 this.radius = Math.random() * 6 + 4;
                 this.color = colors[Math.floor(Math.random() * colors.length)];
                 this.density = Math.random() * canvas.height / 10;
-                this.velocityX = Math.random() * 2 - 1;  // Slower horizontal speed
-                this.velocityY = Math.random() * 3 + 2;  // Slower vertical speed
+                this.velocityX = Math.random() * 3 - 1.5;  // Faster horizontal speed
+                this.velocityY = Math.random() * 5 + 3;  // Faster vertical speed
             }
 
             function updateConfetti() {
