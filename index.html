@@ -14,124 +14,60 @@
             height: 100vh;
             margin: 0;
             overflow: hidden;
-            animation: backgroundChange 5s infinite linear;
-        }
-
-        @keyframes backgroundChange {
-            0% { background-color: #ffadad; }
-            25% { background-color: #ffd6a5; }
-            50% { background-color: #fdffb6; }
-            75% { background-color: #caffbf; }
-            100% { background-color: #9bf6ff; }
-        }
-
-        .form-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            margin-top: 5px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #45a049;
         }
 
         #birthdayMessage {
-            font-size: 40px;
+            font-size: 50px;
             font-weight: bold;
             text-align: center;
             opacity: 0;
             font-family: 'Brush Script MT', cursive;
-            color: #ff69b4;
         }
 
-        #details {
-            font-size: 24px;
+        #dateDisplay {
+            font-size: 30px;
             text-align: center;
             margin-top: 10px;
             font-family: 'Comic Sans MS', cursive, sans-serif;
-            color: #0000ff;
             opacity: 0;
         }
 
-        .hidden {
-            display: none;
-        }
-
-        /* Party Bomb Emoji Styling */
-        .party-bomb {
-            font-size: 50px;
+        #mysteryBox {
             position: absolute;
-            animation: float 2s infinite ease-in-out;
+            bottom: 20px;
+            width: 100px;
+            height: 100px;
+            background-color: #333;
+            border-radius: 10px;
+            text-align: center;
+            line-height: 100px;
+            font-size: 40px;
+            color: #fff;
+            z-index: 10;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        .emoji {
+            position: absolute;
+            font-size: 60px;
+            will-change: transform;
         }
     </style>
 </head>
 <body>
-    <div class="form-container" id="form-container">
-        <h1>Birthday Form</h1>
-        <form id="birthdayForm">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            
-            <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob" name="dob" required>
-            
-            <button type="submit">Enter</button>
-        </form>
-    </div>
+    <div id="birthdayMessage"></div>
+    <div id="dateDisplay"></div>
 
-    <div id="birthdayMessage" class="hidden"></div>
-    <div id="details" class="hidden"></div>
+    <!-- Mystery Box -->
+    <div id="mysteryBox">🎁</div>
 
-    <!-- JavaScript code -->
     <script>
-        document.getElementById('birthdayForm').addEventListener('submit', function(e) {
-            e.preventDefault();  // Prevent the form from submitting
+        document.addEventListener('DOMContentLoaded', function() {
+            const name = "Moaz";  // Replace with the name entered
+            const month = "August";  // Replace with the month extracted from the date
+            const day = "23";  // Replace with the day extracted from the date
 
-            const name = document.getElementById('name').value;
-            const dob = new Date(document.getElementById('dob').value);
-            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            const month = monthNames[dob.getMonth()];
-            const day = dob.getDate();
-
-            // Hide the form
-            document.getElementById('form-container').classList.add('hidden');
-
-            // JavaScript for smoother animation
             const messageContainer = document.getElementById('birthdayMessage');
-            const detailsContainer = document.getElementById('details');
+            const dateContainer = document.getElementById('dateDisplay');
             const message = `Happy Birthday, ${name}!`;
             let i = 0;
             const speed = 100;
@@ -140,33 +76,58 @@
                 if (i < message.length) {
                     messageContainer.textContent += message.charAt(i);
                     messageContainer.style.opacity = 1;
+                    messageContainer.style.color = getRandomColor();
                     i++;
                     setTimeout(typeEffect, speed);
                 } else {
-                    detailsContainer.textContent = `${month} ${day}`;
-                    detailsContainer.style.opacity = 1;
+                    dateContainer.textContent = `${month} ${day}`;
+                    dateContainer.style.opacity = 1;
+                    dateContainer.style.color = getRandomColor();
                 }
             }
 
-            typeEffect();
-
-            // Party bomb effect
-            createPartyBombs();
-        });
-
-        function createPartyBombs() {
-            const bombCount = 10;
-            const body = document.body;
-            for (let i = 0; i < bombCount; i++) {
-                const bomb = document.createElement('div');
-                bomb.classList.add('party-bomb');
-                bomb.textContent = '🥳🎉';
-                bomb.style.left = `${Math.random() * 100}%`;
-                bomb.style.top = `${Math.random() * 100}%`;
-                bomb.style.animationDelay = `${Math.random() * 5}s`;
-                body.appendChild(bomb);
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let j = 0; j < 6; j++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
             }
-        }
+
+            function changeBackgroundColor() {
+                document.body.style.backgroundColor = getRandomColor();
+            }
+
+            function createEmoji() {
+                const emojiArray = ['🎉', '🥳', '🎊', '🎂', '🍰', '🎁'];
+                const emoji = document.createElement('div');
+                emoji.classList.add('emoji');
+                emoji.textContent = emojiArray[Math.floor(Math.random() * emojiArray.length)];
+                emoji.style.left = Math.random() * 100 + 'vw';
+                emoji.style.top = '-10%'; // Start above the viewport
+                document.body.appendChild(emoji);
+
+                // Animate emoji falling from top to bottom
+                const duration = Math.random() * 3 + 2; // Duration between 2 and 5 seconds
+                emoji.style.transition = `transform ${duration}s linear`;
+                emoji.style.transform = `translateY(${window.innerHeight + 100}px)`;
+
+                // Remove emoji after animation
+                setTimeout(() => {
+                    emoji.remove();
+                }, duration * 1000);
+            }
+
+            // Create a new emoji every 500ms
+            setInterval(createEmoji, 500);
+
+            // Change background color every 5 seconds
+            setInterval(changeBackgroundColor, 5000);
+
+            // Start the typing effect
+            typeEffect();
+        });
     </script>
 </body>
 </html>
