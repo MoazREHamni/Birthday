@@ -76,12 +76,19 @@
             font-size: 60px;
             will-change: transform;
         }
+        h1{   
+color:black;
+            font-size:25px;
+            text-align:center;
+            margin:10px;
+        }
     </style>
 </head>
 <body>
 
     <!-- Form for entering name and date -->
     <div id="birthdayForm">
+        <h1>Enter Your Name and Birth Date</h1>
         <input type="text" id="userName" placeholder="Enter your name" required>
         <input type="date" id="birthdayDate" required>
         <button onclick="showBirthdayMessage()">Submit</button>
