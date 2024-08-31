@@ -3,95 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Birthday </title>
+    <title>Birthday</title>
     <style>
         body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    overflow: hidden; /* Hide scrollbars during confetti */
-}
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden; /* Hide scrollbars during confetti */
+        }
 
-.form-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
 
-label {
-    display: block;
-    margin-top: 10px;
-}
+        label {
+            display: block;
+            margin-top: 10px;
+        }
 
-input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
 
-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
-button:hover {
-    background-color: #45a049;
-}
+        button:hover {
+            background-color: #45a049;
+        }
 
-#birthdayMessage {
-    font-size: 50px;
-    font-weight: bold;
-    text-align: center;
-    opacity: 0;
-    transition: opacity 1s;
-}
+        #birthdayMessage {
+            font-size: 40px;
+            font-weight: bold;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s;
+        }
 
-.hidden {
-    display: none;
-}
+        #details {
+            font-size: 24px;
+            text-align: center;
+            margin-top: 10px;
+        }
 
-@keyframes colorChange {
-    0% { color: red; }
-    25% { color: orange; }
-    50% { color: green; }
-    75% { color: blue; }
-    100% { color: purple; }
-}
+        .hidden {
+            display: none;
+        }
 
-@keyframes reveal {
-    0% { opacity: 0; transform: translateY(-20px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
+        @keyframes colorChange {
+            0% { color: red; }
+            25% { color: orange; }
+            50% { color: green; }
+            75% { color: blue; }
+            100% { color: purple; }
+        }
 
-.animated-letter {
-    display: inline-block;
-    animation: colorChange 2s infinite, reveal 1s ease forwards;
-    opacity: 0;
-}
+        @keyframes reveal {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
 
-/* Full-screen confetti effect */
-#confettiCanvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Don't interfere with other elements */
-}
+        .animated-letter {
+            display: inline-block;
+            animation: colorChange 1s infinite, reveal 1s ease forwards;
+            opacity: 0;
+        }
+
+        /* Full-screen confetti effect */
+        #confettiCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Don't interfere with other elements */
+        }
     </style>
 </head>
 <body>
@@ -109,81 +117,92 @@ button:hover {
     </div>
 
     <div id="birthdayMessage" class="hidden"></div>
+    <div id="details" class="hidden"></div>
     <canvas id="confettiCanvas"></canvas>
 
     <script>
         document.getElementById('birthdayForm').addEventListener('submit', function(e) {
-    e.preventDefault();  // Prevent the form from submitting
+            e.preventDefault();  // Prevent the form from submitting
 
-    const name = document.getElementById('name').value;
+            const name = document.getElementById('name').value;
+            const dob = new Date(document.getElementById('dob').value);
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            const month = monthNames[dob.getMonth()];
+            const day = dob.getDate();
 
-    // Hide the form
-    document.getElementById('form-container').classList.add('hidden');
+            // Hide the form
+            document.getElementById('form-container').classList.add('hidden');
 
-    // Create the message with animation
-    const message = `Happy Birthday, ${name}!`;
-    const messageContainer = document.getElementById('birthdayMessage');
-    
-    message.split('').forEach((char, index) => {
-        const span = document.createElement('span');
-        span.textContent = char;
-        span.classList.add('animated-letter');
-        span.style.animationDelay = `${index * 0.2}s`;  // Slower reveal
-        messageContainer.appendChild(span);
-    });
+            // Create the message with animation
+            const message = `Happy Birthday, ${name}!`;
+            const messageContainer = document.getElementById('birthdayMessage');
+            
+            message.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.classList.add('animated-letter');
+                span.style.animationDelay = `${index * 0.1}s`;  // Faster reveal
+                messageContainer.appendChild(span);
+            });
 
-    // Show the message
-    messageContainer.classList.remove('hidden');
-    messageContainer.style.opacity = 1;
+            // Show the message
+            messageContainer.classList.remove('hidden');
+            messageContainer.style.opacity = 1;
 
-    // Trigger the confetti
-    startConfetti();
-});
+            // Show the details
+            const details = `Name: ${name}<br>Date of Birth: ${month} ${day}`;
+            const detailsContainer = document.getElementById('details');
+            detailsContainer.innerHTML = details;
+            detailsContainer.classList.remove('hidden');
 
-function startConfetti() {
-    const canvas = document.getElementById('confettiCanvas');
-    const ctx = canvas.getContext('2d');
-    const confetti = [];
-    const colors = ['#ff0a54', '#ff477e', '#ff85a1', '#fbb1bd', '#f9bec7'];
-    
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    
-    function ConfettiParticle() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height - canvas.height;
-        this.radius = Math.random() * 6 + 4;
-        this.color = colors[Math.floor(Math.random() * colors.length)];
-        this.density = Math.random() * canvas.height / 10;
-        this.velocityX = Math.random() * 2 - 1;  // Slower horizontal speed
-        this.velocityY = Math.random() * 3 + 2;  // Slower vertical speed
-    }
-
-    function updateConfetti() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        confetti.forEach((particle, index) => {
-            particle.y += particle.velocityY;
-            particle.x += particle.velocityX;
-            if (particle.y > canvas.height) {
-                confetti[index] = new ConfettiParticle(); // Reset particle
-            }
-            ctx.beginPath();
-            ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2, false);
-            ctx.fillStyle = particle.color;
-            ctx.fill();
+            // Trigger the confetti
+            startConfetti();
         });
-        requestAnimationFrame(updateConfetti);
-    }
 
-    function initConfetti() {
-        for (let i = 0; i < 150; i++) {
-            confetti.push(new ConfettiParticle());
+        function startConfetti() {
+            const canvas = document.getElementById('confettiCanvas');
+            const ctx = canvas.getContext('2d');
+            const confetti = [];
+            const colors = ['#ff0a54', '#ff477e', '#ff85a1', '#fbb1bd', '#f9bec7'];
+            
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            function ConfettiParticle() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height - canvas.height;
+                this.radius = Math.random() * 6 + 4;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.density = Math.random() * canvas.height / 10;
+                this.velocityX = Math.random() * 2 - 1;  // Slower horizontal speed
+                this.velocityY = Math.random() * 3 + 2;  // Slower vertical speed
+            }
+
+            function updateConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                confetti.forEach((particle, index) => {
+                    particle.y += particle.velocityY;
+                    particle.x += particle.velocityX;
+                    if (particle.y > canvas.height) {
+                        confetti[index] = new ConfettiParticle(); // Reset particle
+                    }
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2, false);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                });
+                requestAnimationFrame(updateConfetti);
+            }
+
+            function initConfetti() {
+                for (let i = 0; i < 150; i++) {
+                    confetti.push(new ConfettiParticle());
+                }
+                updateConfetti();
+            }
+
+            initConfetti();
         }
-        updateConfetti();
-    }
-
-    initConfetti();
-}
     </script>
 </body>
 </html>
